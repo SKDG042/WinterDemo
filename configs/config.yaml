@@ -1,0 +1,13 @@
+database:
+  host: localhost
+  port: 3306
+  username: "042"
+  password: "123123"
+  dbname: "shop"  
+  charset: utf8mb4
+  parseTime: true
+  loc: Local #尝试: 这是database的映射
+
+server:
+  port: 8888
+  host: 127.0.0.1

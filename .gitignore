@@ -1,0 +1,93 @@
+# 编译生成的文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go 特定文件
+*.o
+*.a
+_obj
+_test
+/vendor/
+/go.sum
+
+# IDE 配置文件
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# 日志和临时文件
+*.log
+nohup.out
+tmp/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 配置文件（根据需要调整）
+*.local.yml
+config.local.yaml
+*.local.yaml
+dumped_hertz_remote_config.json
+
+# 输出目录
+/output/
+/bin/
+/dist/
+
+# 压缩文件
+*.zip
+*.gz
+*.tar
+*.rar
+
+# 其他
+*.psd
+*.pptx
+*.bmd
+*.cfg
+
+# Go 特定的编译文件
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+_testmain.go
+
+# Go 编译产生的数字后缀文件
+*.[568vq]
+[568vq].out
+
+# 调试文件
+debug
+debug.test
+__debug_bin
+*.prof
+*.trace
+*.cpu
+*.mem
+
+# 覆盖率报告
+coverage.txt
+coverage.html
+*.cover
+
+# 自动生成的文件
+*.pb.go
+*.gen.go
+*_string.go
+mock_*.go
+
+# 本地开发环境
+.env.local
+.env.development
+.env.test
+.env.production
+		  
