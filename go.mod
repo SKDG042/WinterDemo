@@ -4,6 +4,7 @@ go 1.23
 
 require (
 	github.com/cloudwego/hertz v0.9.5
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12

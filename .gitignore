@@ -90,4 +90,8 @@ mock_*.go
 .env.development
 .env.test
 .env.production
+
+oldversion/
+
 		  
+/zoldversion

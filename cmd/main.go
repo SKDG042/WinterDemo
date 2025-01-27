@@ -1,9 +1,9 @@
 package main
 
 import (
-	"WinterDemo/api"
 	"WinterDemo/configs"
 	"WinterDemo/dao"
+	"WinterDemo/router"
 	"fmt"
 	"log"
 )
@@ -23,7 +23,7 @@ func main() {
 		}
 	}()
 
-	h := api.InitRouter()
+	h := router.InitRouter()
 	h.Spin()
 	fmt.Println("服务器成功关闭")
 }

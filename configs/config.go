@@ -25,6 +25,7 @@ type DatabaseConfig struct {
 type ServerConfig struct {
 	Port int    `mapstructure:"port"`
 	Host string `mapstructure:"host"`
+	JWTSecret string `mapstructure:"jwt_secret"`
 }
 
 var GlobalConfig Config
