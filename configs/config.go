@@ -11,6 +11,8 @@ type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
 	Server   ServerConfig   `mapstructure:"server"`
 }
+
+//数据库配置
 type DatabaseConfig struct {
 	Host      string `mapstructure:"host"`
 	Port      int    `mapstructure:"port"`
@@ -22,14 +24,18 @@ type DatabaseConfig struct {
 	Loc       string `mapstructure:"loc"` //使用mapstructure的目的是与yaml中的键对应
 }
 
+//服务器配置
 type ServerConfig struct {
 	Port int    `mapstructure:"port"`
 	Host string `mapstructure:"host"`
 	JWTSecret string `mapstructure:"jwt_secret"`
+	AccessTokenExpire int `mapstructure:"access_token_expire"`
+	RefreshTokenExpire int `mapstructure:"refresh_token_expire"`
 }
 
 var GlobalConfig Config
 
+//初始化配置
 func InitConfig() error {
 	//设置viper读取的文件名，类型以及地址
 	viper.SetConfigName("config")

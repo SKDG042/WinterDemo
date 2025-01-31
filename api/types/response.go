@@ -23,3 +23,10 @@ func ErrorResponse(status int, info string) *Response {
 		Data:   nil,
 	}
 }
+
+// 登录成功返回的token
+type TokenResponse struct {
+	Token string `json:"token"`
+	RefreshToken string `json:"refresh_token"` 
+}	
+

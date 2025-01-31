@@ -27,6 +27,7 @@ func InitRouter() *server.Hertz {
 	{
 		public.POST("/register", handler.Register)
 		public.POST("/login", handler.Login)
+		public.POST("token/refresh", handler.RefreshToken)
 	}
 
 	auth := h.Group("/")
@@ -35,7 +36,8 @@ func InitRouter() *server.Hertz {
 		//用户相关路由
 		user := auth.Group("/user")
 		{
-			user.POST("update", handler.UpdateUser)
+			user.POST("password/update", handler.UpdatePassword)
+			
 		}
 
 		// //商品相关路由

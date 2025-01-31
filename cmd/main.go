@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	
 	if err := configs.InitConfig(); err != nil {
 		log.Fatalf("初始化配置失败: %s", err)
 	}

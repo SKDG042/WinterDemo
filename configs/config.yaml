@@ -6,9 +6,11 @@ database:
   dbname: "shop"  
   charset: utf8mb4
   parseTime: true
-  loc: Local #尝试: 这是database的映射
+  loc: Local        #尝试: 这是database的映射
 
 server:
   port: 8888
   host: 127.0.0.1
   jwt_secret: "SKDG042"
+  access_token_expire: 1 #token过期时间分钟
+  refresh_token_expire: 10080 #刷新token过期时间分钟(7天)

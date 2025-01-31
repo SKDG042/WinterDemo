@@ -30,38 +30,29 @@ func GetUser(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func UpdateUser(oldUsername string, newUsername string, newPassword string) error {
-	updates := make(map[string]interface{})
+func UpdatePassword(Username string, newPassword string) error {
 
-	if newUsername == oldUsername {
-		newUsername = ""
+	if newPassword == "" || len(newPassword) < 6 {
+		return fmt.Errorf("新密码不能为空且长度不能小于6")
 	}
 
-	if newPassword != "" {
-		updates["password"] = newPassword
+	user,err := GetUser(Username)
+	if err != nil {
+		return fmt.Errorf("获取用户信息失败: %v", err)
 	}
 
-	if newUsername != "" {
-		//首先我们要检查修改后的用户名是否存在
-		if _, err := GetUser(newUsername); err == nil {
-			return fmt.Errorf("用户名%s已存在", newUsername)
-		}
-		updates["username"] = newUsername
+	if newPassword == user.Password {
+		return fmt.Errorf("新密码不能与旧密码相同")
 	}
 
-	//如果操作后updates的len为0，即代表没有修改，所以直接返回
-	if len(updates) == 0 {
-		return nil
-	}
-
-	result := DB.Model(&models.User{}).Where("username = ?", oldUsername).Updates(updates)
+	result := DB.Model(&models.User{}).Where("username = ?", Username).Update("password", newPassword)
 	if result.Error != nil {
-		return fmt.Errorf("更新用户%s信息失败: %v", oldUsername, result.Error)
+		return fmt.Errorf("更新用户%s信息失败: %v", Username, result.Error)
 	}
 
 	//接着确定修改成功(当修改的用户名不存在时会出现静默失败，即用户不存在时也会返回成功)
 	if result.RowsAffected == 0 {
-		return fmt.Errorf("用户%s不存在", oldUsername)
+		return fmt.Errorf("用户%s不存在", Username)
 	}
 	return nil
 }

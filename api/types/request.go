@@ -11,7 +11,10 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-type UpdateUserRequest struct{
-	NewUsername string `json:"newUsername"`
+type UpdatePasswordRequest struct{
 	NewPassword string `json:"newPassword"`
+}
+
+type RefreshTokenRequest struct {
+	RefreshToken string `json:"refresh_token"`
 }

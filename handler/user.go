@@ -51,40 +51,41 @@ func Login(_ context.Context,ctx *app.RequestContext) {
 		return
 	}else{
 		data := map[string]interface{}{
-			"token": token,
+			"token": token.Token,
+			"refresh_token": token.RefreshToken,
 		}
 		ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
 	}
-
 }
 
-func UpdateUser(_ context.Context,ctx *app.RequestContext) {
-	var req types.UpdateUserRequest
+// 利用fresh_token刷新access_token
+func RefreshToken(_ context.Context,ctx *app.RequestContext) {
+	var req types.RefreshTokenRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		ctx.JSON(consts.StatusOK, types.ErrorResponse(10001, "请求参数有错误"))
 		return
 	}
 
-	if req.NewUsername == "" && req.NewPassword == "" {
-		ctx.JSON(consts.StatusOK, types.ErrorResponse(10007, "请求参数有错误"))
+	token,err := service.RefreshToken(req.RefreshToken)
+	if err != nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10006, "刷新token失败"))
 		return
 	}
+	
+	ctx.JSON(consts.StatusOK, types.SuccessResponse(token))
+}
 
-	//!=0即代表有修改
-	if req.NewUsername != "" && len(req.NewUsername) < 3 {
-		ctx.JSON(consts.StatusOK, types.ErrorResponse(10002, "用户名长度至少3位"))
-		return
-	}
-
-	if req.NewPassword != "" && len(req.NewPassword) < 6 {
-		ctx.JSON(consts.StatusOK, types.ErrorResponse(10003, "密码长度至少6位"))
+func UpdatePassword(_ context.Context,ctx *app.RequestContext) {
+	var req types.UpdatePasswordRequest
+	if err := ctx.BindJSON(&req); err != nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10001, "请求参数有错误"))
 		return
 	}
 
 	//从鉴权jwt的中间件ctx.set("username")中获取username
 	username := ctx.GetString("username")
 
-	if err := service.UpdateUser(username, req.NewUsername, req.NewPassword); err != nil {
+	if err := service.UpdatePassword(username, req.NewPassword); err != nil {
 		ctx.JSON(consts.StatusOK, types.ErrorResponse(10006, err.Error()))
 		return
 	}

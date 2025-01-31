@@ -27,14 +27,16 @@ POST
 |--------|--------|----------|----------|
 | status | int    | 状态码   | 10000    |
 | info   | string | 状态信息 | "success"|
-| data   | object | 返回数据 | null     |
+| data   | object | 返回数据 | {"message": "注册成功"} |
 
 ### 响应示例
 成功：
 {
     "status": 10000,
     "info": "success",
-    "data": null
+    "data": {
+        "message": "注册成功"
+    }
 }
 
 失败：
@@ -44,18 +46,9 @@ POST
     "data": null
 }
 
-### 错误码说明
-| 状态码 | 说明         |
-|--------|------------|
-| 10000  | 成功       |
-| 10001  | 请求参数有错误 |
-| 10002  | 用户名长度至少3位，密码长度至少6位 |
-| 10003  | 用户名已存在 |
-| 10004  | 注册失败    |
-
 ## 2. 用户登录
 ### 接口描述
-用户登录获取认证
+用户登录获取认证token
 
 ### 请求方法
 POST
@@ -80,7 +73,7 @@ POST
 |--------|--------|----------|----------|
 | status | int    | 状态码   | 10000    |
 | info   | string | 状态信息 | "success"|
-| data   | object | 返回数据 | {"token": "eyJhbG..."} |
+| data   | object | 返回数据 | {"token": "xxx", "refresh_token": "xxx"} |
 
 ### 响应示例
 成功：
@@ -88,58 +81,66 @@ POST
     "status": 10000,
     "info": "success",
     "data": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     }
 }
 
-失败：
-{
-    "status": 10005,
-    "info": "用户名不存在",
-    "data": null
-}
-
-### 错误码说明
-| 状态码 | 说明         |
-|--------|------------|
-| 10000  | 成功       |
-| 10001  | 请求参数有错误 |
-| 10005  | 登录失败    |
-| 10006  | 认证失败    |
-
-## 3. 修改用户信息
+## 3. 刷新Token
 ### 接口描述
-修改当前登录用户的用户名或密码
+使用refresh_token刷新access_token
 
 ### 请求方法
 POST
 
 ### 请求路径
-/user/update
+/user/token/refresh
+
+### 请求参数
+| 参数名        | 类型   | 必填 | 说明          | 示例     |
+|--------------|--------|------|---------------|----------|
+| refresh_token| string | 是   | 刷新令牌      | "Bearer eyJhbG..." |
+
+### 请求示例
+{
+    "refresh_token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+### 响应示例
+成功：
+{
+    "status": 10000,
+    "info": "success",
+    "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+}
+
+## 4. 修改密码
+### 接口描述
+修改用户密码
+
+### 请求方法
+POST
+
+### 请求路径
+/user/password/update
 
 ### 请求头
-| 参数名        | 说明                           | 示例                                    |
-|--------------|--------------------------------|----------------------------------------|
-| Authorization| Bearer Token                   | Bearer eyJhbGciOiJIUzI1NiIsInR5cCI... |
+| 参数名        | 说明         | 示例                                    |
+|--------------|--------------|----------------------------------------|
+| Authorization| Bearer Token | Bearer eyJhbGciOiJIUzI1NiIsInR5cCI... |
 
 ### 请求参数
 | 参数名      | 类型   | 必填 | 说明          | 示例      |
 |------------|--------|------|---------------|-----------|
-| newUsername| string | 否   | 新用户名(3-20位)| "lisi"    |
-| newPassword| string | 否   | 新密码(6-20位) | "654321"  |
+| newPassword| string | 是   | 新密码(6-20位) | "654321"  |
 
 ### 请求示例
 {
-    "newUsername": "lisi",
     "newPassword": "654321"
 }
-
-### 响应参数
-| 参数名 | 类型   | 说明     | 示例     |
-|--------|--------|----------|----------|
-| status | int    | 状态码   | 10000    |
-| info   | string | 状态信息 | "success"|
-| data   | object | 返回数据 | {"message": "更新成功"} |
 
 ### 响应示例
 成功：
@@ -150,20 +151,3 @@ POST
         "message": "更新成功"
     }
 }
-
-失败：
-{
-    "status": 10007,
-    "info": "用户名已存在",
-    "data": null
-}
-
-### 错误码说明
-| 状态码 | 说明         |
-|--------|------------|
-| 10000  | 成功       |
-| 10001  | 请求参数有错误 |
-| 10002  | 参数长度错误  |
-| 10006  | 认证失败     |
-| 10007  | 用户名已存在 |
-| 10008  | 修改失败    |
