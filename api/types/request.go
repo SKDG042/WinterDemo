@@ -18,3 +18,15 @@ type UpdatePasswordRequest struct{
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token"`
 }
+
+// 根据接口文档，全部请求参数都是非必选，所以使用omitempty为空时，不返回该字段
+type UpdateUserInfoRequest struct {
+	Nickname string `json:"nickname,omitempty"`
+	Avatar string `json:"avatar,omitempty"`
+	Introduction string `json:"introduction,omitempty"`
+	Telephone string `json:"telephone,omitempty"`
+	QQ string `json:"qq,omitempty"`
+	Gender string `json:"gender,omitempty"`
+	Email string `json:"email,omitempty"`
+	Birthday string `json:"birthday,omitempty"`
+}

@@ -75,6 +75,7 @@ func RefreshToken(_ context.Context,ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(token))
 }
 
+// 更新密码
 func UpdatePassword(_ context.Context,ctx *app.RequestContext) {
 	var req types.UpdatePasswordRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -96,3 +97,23 @@ func UpdatePassword(_ context.Context,ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
 }
 
+// 更新用户信息
+func UpdateUserInfo(_ context.Context, ctx *app.RequestContext) {
+	var req types.UpdateUserInfoRequest
+	if err := ctx.BindJSON(&req); err != nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10001, "请求参数有错误"))
+		return
+	}
+
+	username := ctx.GetString("username")
+
+	if err := service.UpdateUserInfo(username, req); err !=nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10006, err.Error()))
+		return
+	}
+
+	data := map[string]interface{}{
+		"message": "更新成功",
+	}
+	ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
+}

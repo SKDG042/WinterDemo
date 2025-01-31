@@ -56,3 +56,16 @@ func UpdatePassword(Username string, newPassword string) error {
 	}
 	return nil
 }
+
+func UpdateUserInfo(username string, updates map[string]interface{}) error {
+	result := DB.Model(&models.User{}).Where("username = ?", username).Updates(updates)
+	if result.Error != nil {
+		return fmt.Errorf("更新用户%s信息失败: %v", username, result.Error)
+	}
+
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("用户%s不存在", username)
+	}
+
+	return nil
+}

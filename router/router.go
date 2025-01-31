@@ -37,7 +37,7 @@ func InitRouter() *server.Hertz {
 		user := auth.Group("/user")
 		{
 			user.POST("password/update", handler.UpdatePassword)
-			
+			user.POST("info", handler.UpdateUserInfo)
 		}
 
 		// //商品相关路由

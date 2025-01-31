@@ -72,3 +72,45 @@ func RefreshToken(refreshToken string) (types.TokenResponse, error) {
 func UpdatePassword(username, newPassword string) error {
 	return dao.UpdatePassword(username, newPassword)
 }
+
+func UpdateUserInfo(username string, info types.UpdateUserInfoRequest) error {
+	// 创建一个map来存储需要更新的字段
+	updates := make(map[string]interface{})
+
+	//如果info的字段值不为空，则将字段和值存入map
+	if info.Nickname != "" {
+		updates["nickname"] = info.Nickname
+	}
+	if info.Avatar != "" {
+		updates["avatar"] = info.Avatar
+	}
+	if info.Introduction != "" {
+		updates["introduction"] = info.Introduction
+	}
+	if info.Telephone != "" {
+		updates["telephone"] = info.Telephone
+	}
+	if info.QQ != "" {
+		updates["qq"] = info.QQ
+	}
+	if info.Gender != "" {
+		updates["gender"] = info.Gender
+	}
+	if info.Email != "" {
+		updates["email"] = info.Email
+	}
+	if info.Birthday != "" {
+		updates["birthday"] = info.Birthday
+	}
+	if info.Telephone != "" {
+		updates["telephone"] = info.Telephone
+	}
+
+	//如果map为空，则没有需要更新的信息
+	if len(updates) == 0 {
+		return fmt.Errorf("没有需要更新的信息")
+	}
+
+	// 调用dao.UpdateUserInfo() 更新用户信息
+	return dao.UpdateUserInfo(username, updates)
+}
