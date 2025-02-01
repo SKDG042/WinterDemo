@@ -30,13 +30,15 @@ func GenerateToken(username string) (string, string, error) {
 		},
 	}
 
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// 依据claims创建一个未签名的access_token
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)	
+	// 使用configs中的密钥对access_token进行签名
 	accessTokenString, err := accessToken.SignedString([]byte(configs.GlobalConfig.Server.JWTSecret))
 	if err != nil {
 		return "","",fmt.Errorf("生成access_token失败: %s", err)
 	}
 
-	//生成refresh_token
+	//生成refresh_token 同上
 	refreshClaims := Claims{
 		Username: username,
 		TokenType: "refresh_token",
@@ -62,15 +64,16 @@ func ParseToken(tokenString string) (string, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(configs.GlobalConfig.Server.JWTSecret), nil
-	}) //解析token
+	})
 
 	if err != nil {
 		return "", fmt.Errorf("token解析错误: %s", err)	
 	}
 
+	//检验token是否有效(例如过期,签名错误,格式错误等)
 	if !token.Valid {
 		return "", fmt.Errorf("token无效: %s", err)
-	}//检验token是否有效
+	}
 
 	return claims.Username, nil
 }

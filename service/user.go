@@ -3,7 +3,7 @@ package service
 import (
 	"WinterDemo/configs"
 	"WinterDemo/dao"
-	myjwt "WinterDemo/pkg/jwt"
+	myjwt "WinterDemo/pkg/jwt" // 重命名防止冲突
 	"WinterDemo/api/types"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
@@ -19,9 +19,11 @@ func Register(username, password string) error {
 }
 
 func Login(username, password string) (types.TokenResponse, error) {
+
+	
 	user,err := dao.GetUser(username)
 	if err != nil {
-		return types.TokenResponse{}, fmt.Errorf("用户%s不存在", username)
+		return types.TokenResponse{}, fmt.Errorf("用户%s不存在", username) //if err !=)
 	}
 
 	if user.Password != password {
@@ -54,10 +56,12 @@ func RefreshToken(refreshToken string) (types.TokenResponse, error) {
         return []byte(configs.GlobalConfig.Server.JWTSecret), nil
     })
 
+	// 判断token是否有效，claims.TokenType是否为refresh_token
 	if err != nil || !token.Valid || claims.TokenType != "refresh_token" {
 		return types.TokenResponse{}, fmt.Errorf("无效的refresh_token: %s", err)
 	}
 
+	// 生成新的access_token和refresh_token
 	accessToken, newRefreshToken, err := myjwt.GenerateToken(claims.Username)
 	if err != nil {
 		return types.TokenResponse{}, fmt.Errorf("刷新token失败: %s", err)

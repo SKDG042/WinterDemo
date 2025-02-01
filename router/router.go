@@ -40,14 +40,16 @@ func InitRouter() *server.Hertz {
 			user.POST("info", handler.UpdateUserInfo)
 		}
 
-		// //商品相关路由
+		//商品相关路由
+		product := auth.Group("/product")
+		{
+			product.GET("/list", handler.GetProductsByCategory)
+			product.GET("/info/:id", handler.GetProductDetail)
+			product.GET("/search", handler.SearchProduct)
+			product.GET("/type", handler.GetProductsByCategory)
+		}
+		// //评论相关路由
 		// comment := auth.Group("/comment")
-		// {
-
-		// }
-
-		// //商品相关路由
-		// product := auth.Group("/product")
 		// {
 
 		// }
