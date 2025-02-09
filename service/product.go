@@ -7,9 +7,10 @@ import (
 )
 
 // 为了符合API文档的返回格式，我需要将Product转换为ProductResponse
-func convertToProductResponse(p models.Product) types.ProductResponse {
+func convertToProductResponse(product models.Product) types.ProductResponse {
+	//首先把product.Categories这个切片转换为types.CategoryResponse的格式
 	var categories []types.CategoryResponse
-	for _,c := range p.Categories {
+	for _,c := range product.Categories {
 		categories = append(categories, types.CategoryResponse{
 			ID:		c.ID,
 			Name:	c.Name,
@@ -17,16 +18,16 @@ func convertToProductResponse(p models.Product) types.ProductResponse {
 		})
 	}
 	return types.ProductResponse{
-		ProductID:   p.ID,
-        Name:        p.Name,
-        Description: p.Description,
-        Type:        p.Type,
-        CommentNum:  p.CommentNum,
-        Price:       p.Price,
-        IsAddCart:   p.IsAddCart,
-        Cover:       p.Cover,
-        PublishTime: p.PublishTime,
-        Link:        p.Link,
+		ProductID:   product.ID,
+        Name:        product.Name,
+        Description: product.Description,
+        Type:        product.Type,
+        CommentNum:  product.CommentNum,
+        Price:       product.Price,
+        IsAddCart:   product.IsAddCart,
+        Cover:       product.Cover,
+        PublishTime: product.PublishTime,
+        Link:        product.Link,
         Categories:  categories,
 	}
 }

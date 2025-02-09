@@ -32,7 +32,7 @@ type UpdateUserInfoRequest struct {
 }
 
 type SearchProductRequest struct {
-	ProductName string `form:"product_name"` // form来接受/search?product_name=xxx的参数
+	ProductName string `form:"product_name"` // form来接受/search?product_name=xxx这样的参数
 }
 
 type GetProductsByCategoryRequest struct {

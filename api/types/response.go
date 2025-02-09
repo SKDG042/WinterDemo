@@ -28,7 +28,19 @@ func ErrorResponse(status int, info string) *Response {
 type TokenResponse struct {
 	Token 			string `json:"token"`
 	RefreshToken 	string `json:"refresh_token"` 
-}	
+}
+
+type UserInfoResponse struct {
+	ID 				uint 	`json:"id"`
+	Avatar 			string 	`json:"avatar"`
+	Nickname 		string 	`json:"nickname"`
+	Introduction 	string 	`json:"introduction"`
+	Phone 			string 	`json:"phone"`
+	QQ 				string 	`json:"qq"`
+	Gender 			string 	`json:"gender"`
+	Email 			string 	`json:"email"`
+	Birthday 		string 	`json:"birthday"`
+}
 
 // 商品分类的响应
 type CategoryResponse struct {
@@ -39,7 +51,7 @@ type CategoryResponse struct {
 
 // 查询商品响应
 type ProductResponse struct {
-	ProductID	uint		`json:"product_id"`
+	ProductID	uint	`json:"product_id"`
 	Name		string	`json:"name"`
 	Description string	`json:"description"`
 	Type		string	`json:"type"`

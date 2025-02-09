@@ -75,6 +75,28 @@ func RefreshToken(_ context.Context,ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(token))
 }
 
+// 获取用户信息
+func GetUserInfo(_ context.Context, ctx *app.RequestContext) {
+	username := ctx.Param("username")
+	if username == "" {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10007, "用户名不能为空"))
+		return
+	}
+
+	response, err := service.GetUserInfo(username)
+	if err != nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10008, "获取用户信息失败"))
+		return
+	}
+
+	//符合api文档的返回格式
+	data := map[string]interface{}{
+		username: response,
+	}
+	
+	ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
+}
+
 // 更新密码
 func UpdatePassword(_ context.Context,ctx *app.RequestContext) {
 	var req types.UpdatePasswordRequest

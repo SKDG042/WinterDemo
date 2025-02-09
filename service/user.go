@@ -73,6 +73,25 @@ func RefreshToken(refreshToken string) (types.TokenResponse, error) {
 	}, nil
 }
 
+func GetUserInfo(username string) (types.UserInfoResponse, error) {
+	user, err := dao.GetUser(username)
+	if err != nil {
+		return types.UserInfoResponse{}, fmt.Errorf("获取用户信息失败: %v", err)
+	}
+
+	return types.UserInfoResponse{
+		ID: user.ID,
+		Avatar: user.Avatar,
+		Nickname: user.Nickname,
+		Introduction: user.Introduction,
+		Phone: user.Telephone,
+		QQ: user.QQ,
+		Gender: user.Gender,
+		Email: user.Email,
+		Birthday: user.Birthday,
+	}, nil
+}
+
 func UpdatePassword(username, newPassword string) error {
 	return dao.UpdatePassword(username, newPassword)
 }

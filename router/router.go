@@ -23,13 +23,26 @@ func InitRouter() *server.Hertz {
 	// })
 
 	//用户相关路由
-	public := h.Group("/user")
+	public := h.Group("/")
 	{
-		public.POST("/register", handler.Register)
-		public.POST("/login", handler.Login)
-		public.POST("token/refresh", handler.RefreshToken)
+		user := public.Group("/user")
+		{
+			user.POST("/register", handler.Register)
+			user.POST("/login", handler.Login)
+			user.POST("token/refresh", handler.RefreshToken)
+			user.GET("info/:username", handler.GetUserInfo)
+		}
+
+		product := public.Group("/product")
+		{
+			product.GET("/list", handler.GetProductsByCategory)
+			product.GET("/info/:id", handler.GetProductDetail)
+			product.GET("/search", handler.SearchProduct)
+			product.GET("/type", handler.GetProductsByCategory)
+		}
 	}
 
+	// 需要鉴权的路由
 	auth := h.Group("/")
 	auth.Use(middleware.JWTauth())
 	{
@@ -40,14 +53,11 @@ func InitRouter() *server.Hertz {
 			user.POST("info", handler.UpdateUserInfo)
 		}
 
-		//商品相关路由
-		product := auth.Group("/product")
-		{
-			product.GET("/list", handler.GetProductsByCategory)
-			product.GET("/info/:id", handler.GetProductDetail)
-			product.GET("/search", handler.SearchProduct)
-			product.GET("/type", handler.GetProductsByCategory)
-		}
+		// //商品相关路由
+		// product := auth.Group("/product")
+		// {
+			
+		// }
 		// //评论相关路由
 		// comment := auth.Group("/comment")
 		// {

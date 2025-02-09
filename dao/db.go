@@ -18,9 +18,9 @@ func InitDB() error {
 	// fmt.Printf("正在使用以下配置连接数据库：\n用户名：%s\n主机：%s\n端口：%d\n数据库：%s\n",
 	// conf.Username, conf.Host, conf.Port, conf.DBName)
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/",	//这个dsn是/,没有连接到指定数据库
 		conf.Username, conf.Password, conf.Host, conf.Port,
-	) //这个dsn是/,没有连接到指定数据库
+	) 
 
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -28,7 +28,7 @@ func InitDB() error {
 		return fmt.Errorf("数据库连接失败: %s", err)
 	} //连接mysql但是没有连接到指定数据库
 
-	//row在mysql中检查数据库是否存在,不存在会返回sql.ErrNoRows存储在row中，必须读取才能知道
+	//row在mysql中负责检查数据库是否存在,不存在会返回sql.ErrNoRows存储在row中，但是必须读取row才能知道
 	//row是一个*sql.Row类型的指针，所以需要Scan()把结果传给dbName来获取数据判断是否存在
 	row := DB.Raw("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?", conf.DBName).Row()
 	var dbName string
@@ -56,7 +56,17 @@ func InitDB() error {
 	//接下来依据models中的结构体创建表
 	err = DB.AutoMigrate(&models.User{})
 	if err != nil {
-		return fmt.Errorf("创建表失败: %s", err)
+		return fmt.Errorf("创建user表失败: %s", err)
+	}
+
+	err = DB.AutoMigrate(&models.Product{})
+	if err != nil {
+		return fmt.Errorf("创建product表失败: %s", err)
+	}
+
+	err = DB.AutoMigrate(&models.Category{})
+	if err != nil {
+		return fmt.Errorf("创建category表失败: %s", err)
 	}
 
 	return nil
@@ -65,10 +75,14 @@ func InitDB() error {
 func CloseDB() error {
 	if DB != nil { //检测DB是否为空
 		db, err := DB.DB() //DB是*gorm.DB类型，而我需要的是DB.DB()返回的*sql.DB类型
+		
 		if err != nil {
 			return fmt.Errorf("获取数据库实例(即*sql.DB)失败: %s", err)
 		}
-		db.Close()
+
+		if err :=db.Close(); err != nil {
+			return fmt.Errorf("关闭数据库失败: %s", err)
+		}
 
 		fmt.Println("数据库连接已关闭")
 	}
