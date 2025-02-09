@@ -32,9 +32,24 @@ type UpdateUserInfoRequest struct {
 }
 
 type SearchProductRequest struct {
-	ProductName string `form:"product_name"` // form来接受/search?product_name=xxx这样的参数
+	ProductName string `query:"product_name"` // query来接受/search?product_name=xxx这样的参数
 }
 
-type GetProductsByCategoryRequest struct {
-	CategoryID int `form:"category_id"`
+// 创建分类请求结构体
+type AddCategoryRequest struct {
+	Name 		string `json:"name"`
+	Description string `json:"description"`
 }
+
+// 创建产品请求结构体 
+type AddProductRequest struct {
+    Name        string    `json:"name"`     
+    Description string    `json:"description"`                 
+    Type        string    `json:"type"`                         
+    Price       float64   `json:"price"`     
+    Cover       string    `json:"cover"`                      
+    PublishTime string    `json:"publish_time"`              
+    Link        string    `json:"link"`                        
+    CategoryIDs []uint    `json:"category_ids"` // 使用[]uint来表示多个分类ID以简便                 
+}
+

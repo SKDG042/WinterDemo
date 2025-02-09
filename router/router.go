@@ -2,9 +2,10 @@ package router
 
 import (
 	"WinterDemo/configs"
+	"WinterDemo/handler"
 	"WinterDemo/middleware"
 	"fmt"
-	"WinterDemo/handler"
+
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -35,10 +36,13 @@ func InitRouter() *server.Hertz {
 
 		product := public.Group("/product")
 		{
-			product.GET("/list", handler.GetProductsByCategory)
+			product.GET("/list", handler.GetProductList)
 			product.GET("/info/:id", handler.GetProductDetail)
 			product.GET("/search", handler.SearchProduct)
-			product.GET("/type", handler.GetProductsByCategory)
+			product.GET("/category/:id", handler.GetProductsByCategory)
+			// 先放这，等之后有管理员账号再移动
+			product.POST("/add/category", handler.AddCategory)
+			product.POST("/add/product", handler.AddProduct)
 		}
 	}
 
@@ -56,7 +60,7 @@ func InitRouter() *server.Hertz {
 		// //商品相关路由
 		// product := auth.Group("/product")
 		// {
-			
+
 		// }
 		// //评论相关路由
 		// comment := auth.Group("/comment")

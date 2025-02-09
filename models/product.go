@@ -22,7 +22,7 @@ type Product struct {
 
 type Category struct {
 	gorm.Model
-	Name 		string 		`gorm:"type:varchar(66);not null"`
+	Name 		string 		`gorm:"type:varchar(66);not null;unique"`
 	Description string 		`gorm:"type:varchar(255)"`
 	Products 	[]Product 	`gorm:"many2many:product_categories;"`
 }

@@ -4,6 +4,7 @@ import (
 	"WinterDemo/api/types"
 	"WinterDemo/dao"
 	"WinterDemo/models"
+	"fmt"
 )
 
 // 为了符合API文档的返回格式，我需要将Product转换为ProductResponse
@@ -75,7 +76,7 @@ func GetProductsByCategory(categoryID int) (types.ProductListResponse, error) {
 	return response, nil
 }
 
-
+// 获取商品详情
 func GetProductDetail(id int) (types.ProductResponse, error) {
 	product, err := dao.GetProductByID(id)
 	if err != nil {
@@ -83,4 +84,41 @@ func GetProductDetail(id int) (types.ProductResponse, error) {
 	}
 	
 	return convertToProductResponse(product), nil
+}
+
+// 添加商品分类
+func AddCategory(category types.AddCategoryRequest) error {
+
+	if _,err := dao.GetCategoryByName(category.Name); err == nil {
+		return fmt.Errorf("分类%s已存在", category.Name)
+	}
+
+	newCategory := models.Category{
+		Name: category.Name,
+		Description: category.Description,
+	}
+	
+	err := dao.AddCategory(newCategory)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// 添加商品
+func AddProduct(product types.AddProductRequest) error {
+	newProduct := models.Product{
+		Name: product.Name,
+		Description: product.Description,
+		Type: product.Type,
+		Price: product.Price,
+		Cover: product.Cover,
+		PublishTime: product.PublishTime,
+		Link: product.Link,
+	}
+	err := dao.AddProduct(newProduct, product.CategoryIDs)
+	if err != nil {
+		return err
+	}
+	return nil
 }

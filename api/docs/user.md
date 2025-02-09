@@ -76,7 +76,6 @@ POST
 | data   | object | 返回数据 | {"token": "xxx", "refresh_token": "xxx"} |
 
 ### 响应示例
-成功：
 {
     "status": 10000,
     "info": "success",
@@ -107,7 +106,6 @@ POST
 }
 
 ### 响应示例
-成功：
 {
     "status": 10000,
     "info": "success",
@@ -117,7 +115,41 @@ POST
     }
 }
 
-## 4. 修改密码
+## 4. 获取用户信息
+### 接口描述
+获取指定用户的详细信息
+
+### 请求方法
+GET
+
+### 请求路径
+/user/info/{username}
+
+### 路径参数
+| 参数名   | 类型   | 必填 | 说明     |
+|----------|--------|------|----------|
+| username | string | 是   | 用户名    |
+
+### 响应示例
+{
+    "status": 10000,
+    "info": "success",
+    "data": {
+        "zhangsan": {
+            "id": 1,
+            "avatar": "http://example.com/avatar.jpg",
+            "nickname": "张三",
+            "introduction": "这是我的简介",
+            "phone": "13812345678",
+            "qq": "12345678",
+            "gender": "男",
+            "email": "zhangsan@example.com",
+            "birthday": "2000-01-01"
+        }
+    }
+}
+
+## 5. 修改密码
 ### 接口描述
 修改用户密码
 
@@ -143,7 +175,6 @@ POST
 }
 
 ### 响应示例
-成功：
 {
     "status": 10000,
     "info": "success",
@@ -152,7 +183,7 @@ POST
     }
 }
 
-## 5. 更新用户信息
+## 6. 更新用户信息
 ### 接口描述
 更新用户的个人信息
 
