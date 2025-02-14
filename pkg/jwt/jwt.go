@@ -10,6 +10,7 @@ import (
 
 type Claims struct {
 	Username string `json:"username"`
+	UserID	uint	`json:"user_id"`
 	//这里的种类主要是为了在刷新token时避免使用access_token执行service.RefreshToken刷新access_token
 	TokenType string `json:"token_type"` 
 	jwt.RegisteredClaims

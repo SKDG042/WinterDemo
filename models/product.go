@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Product struct {
 	gorm.Model
-	Name 		string 		`gorm:"type:varchar(66);not null"`
+	Name 		string 		`gorm:"type:varchar(66);not null;index"`
 	Description string 		`gorm:"type:text"`
 	Type 		string 		`gorm:"type:varchar(66)"`
 	CommentNum 	int 		`gorm:"type:int;default:0;column:comment_num"`
@@ -22,7 +22,7 @@ type Product struct {
 
 type Category struct {
 	gorm.Model
-	Name 		string 		`gorm:"type:varchar(66);not null;unique"`
+	Name 		string 		`gorm:"type:varchar(66);not null;unique;index"`
 	Description string 		`gorm:"type:varchar(255)"`
 	Products 	[]Product 	`gorm:"many2many:product_categories;"`
 }

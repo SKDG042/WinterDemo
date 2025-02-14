@@ -15,7 +15,7 @@ func JWTauth() app.HandlerFunc {
 		authHeader := string(ctx.GetHeader("Authorization"))
 		if authHeader == "" {
 			ctx.JSON(consts.StatusUnauthorized, types.ErrorResponse(10006,"请先登录"))
-			ctx.Abort() // Abort()为中间件特有的方法，用于停止请求处理
+			ctx.Abort() // Abort()为中间件特有的方法，用于停止所有中间件
 			return
 		}
 

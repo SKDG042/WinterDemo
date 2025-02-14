@@ -54,19 +54,9 @@ func InitDB() error {
 	fmt.Println("数据库连接成功")
 
 	//接下来依据models中的结构体创建表
-	err = DB.AutoMigrate(&models.User{})
+	err = DB.AutoMigrate(&models.User{}, &models.Product{}, &models.Category{}, &models.Comment{})
 	if err != nil {
-		return fmt.Errorf("创建user表失败: %s", err)
-	}
-
-	err = DB.AutoMigrate(&models.Product{})
-	if err != nil {
-		return fmt.Errorf("创建product表失败: %s", err)
-	}
-
-	err = DB.AutoMigrate(&models.Category{})
-	if err != nil {
-		return fmt.Errorf("创建category表失败: %s", err)
+		return fmt.Errorf("迁移表失败: %s", err)
 	}
 
 	return nil

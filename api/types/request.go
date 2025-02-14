@@ -53,3 +53,15 @@ type AddProductRequest struct {
     CategoryIDs []uint    `json:"category_ids"` // 使用[]uint来表示多个分类ID以简便                 
 }
 
+// 添加评论的请求结构体
+type AddCommentRequest struct {
+	Content 	string		`json:"content"`
+	ParentID	*uint		`json:"parent_id,omitempty"`
+	ProductID	uint		`json:"product_id"`
+}
+
+// 更新评论的请求结构体
+type UpdateCommentRequest struct {
+	Content 	string		`json:"content"`
+}
+

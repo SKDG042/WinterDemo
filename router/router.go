@@ -28,20 +28,30 @@ func InitRouter() *server.Hertz {
 	{
 		user := public.Group("/user")
 		{
+			//用户注册
 			user.POST("/register", handler.Register)
+			//用户登录
 			user.POST("/login", handler.Login)
+			//刷新token
 			user.POST("token/refresh", handler.RefreshToken)
+			//获取用户信息
 			user.GET("info/:username", handler.GetUserInfo)
 		}
 
 		product := public.Group("/product")
-		{
+		{	
+			//获取商品列表
 			product.GET("/list", handler.GetProductList)
+			//获取商品详情
 			product.GET("/info/:id", handler.GetProductDetail)
+			//搜索商品
 			product.GET("/search", handler.SearchProduct)
+			//按照分类id获取商品
 			product.GET("/category/:id", handler.GetProductsByCategory)
 			// 先放这，等之后有管理员账号再移动
+			// 添加商品分类
 			product.POST("/add/category", handler.AddCategory)
+			// 添加商品
 			product.POST("/add/product", handler.AddProduct)
 		}
 	}
@@ -53,7 +63,9 @@ func InitRouter() *server.Hertz {
 		//用户相关路由
 		user := auth.Group("/user")
 		{
+			// 仅修改密码
 			user.POST("password/update", handler.UpdatePassword)
+			// 修改用户信息
 			user.POST("info", handler.UpdateUserInfo)
 		}
 
@@ -62,11 +74,14 @@ func InitRouter() *server.Hertz {
 		// {
 
 		// }
-		// //评论相关路由
-		// comment := auth.Group("/comment")
-		// {
-
-		// }
+		//评论相关路由
+		comment := auth.Group("/comment")
+		{	// 评论的增删查改
+			comment.POST("/:product_id", handler.AddComment)
+			comment.DELETE("/:comment_id", handler.DeleteComment)
+			comment.GET("/:product_id", handler.GetCommentsByProductID)
+			comment.PUT("/:comment_id", handler.UpdateComment)
+		}
 
 		// //购物车相关路由
 		// cart := auth.Group("/cart")
