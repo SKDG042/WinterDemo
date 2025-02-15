@@ -10,14 +10,13 @@ import (
 )
 
 func InitRouter() *server.Hertz {
-	h := server.Default(
-		server.WithHostPorts(
-			fmt.Sprintf("%s:%d",
-				configs.GlobalConfig.Server.Host,
-				configs.GlobalConfig.Server.Port,
-			),
-		),
-	)
+	 h := server.Default(
+        server.WithHostPorts(fmt.Sprintf("%s:%d", 
+            configs.GlobalConfig.Server.Host,
+            configs.GlobalConfig.Server.Port,
+        )),
+        server.WithNetwork("tcp4"), // 强制使用 IPv4
+    )
 
 	// h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
 	// 	ctx.JSON(200, utils.H{"message": "pong"})
