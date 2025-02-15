@@ -31,7 +31,7 @@ func AddComment(_ context.Context, ctx *app.RequestContext) {
 	}
 
 	data := map[string]interface{}{
-		"comment_id": comment.ID,
+		"comment_id": comment.CommentID,
 		"message": "评论成功",
 	}
 
@@ -56,7 +56,7 @@ func DeleteComment(_ context.Context, ctx *app.RequestContext) {
 		return
 	}
 
-	ctx.JSON(consts.StatusOK, types.SuccessResponse(nil))
+	ctx.JSON(consts.StatusOK, types.SuccessResponse("删除评论成功"))
 }
 
 func GetCommentsByProductID(_ context.Context, ctx *app.RequestContext) {
@@ -99,5 +99,5 @@ func UpdateComment(_ context.Context, ctx *app.RequestContext) {
 		return
 	}
 
-	ctx.JSON(consts.StatusOK, types.SuccessResponse(nil))
+	ctx.JSON(consts.StatusOK, types.SuccessResponse("更新评论成功"))
 }	

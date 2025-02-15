@@ -79,7 +79,7 @@ func GetProductDetail(_ context.Context, ctx *app.RequestContext) {
 		return
 	}
 
-	response, err := service.GetProductDetail(productID)
+	response, err := service.GetProductDetail(uint(productID))
 	if err != nil {
 		ctx.JSON(consts.StatusOK, types.ErrorResponse(10109, "获取商品详情失败"))
 		return

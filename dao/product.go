@@ -46,9 +46,9 @@ func GetProductsByCategory(categoryID int) ([]models.Product, error) {
 }
 
 // 根据商品ID获取商品
-func GetProductByID(id int) (models.Product, error) {
+func GetProductByID(productID uint) (models.Product, error) {
 	var product models.Product
-	result := DB.Preload("Categories").First(&product, id) // 根据id查询商品的第一个传给product
+	result := DB.Preload("Categories").First(&product, productID) // 根据id查询商品的第一个传给product
 	if result.Error != nil {
 		return models.Product{}, fmt.Errorf("获取商品失败: %v", result.Error)
 	}

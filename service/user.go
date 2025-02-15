@@ -42,11 +42,11 @@ func Login(username, password string) (types.TokenResponse, error) {
 }
 
 // 根据refresh_token刷新access_token
-func RefreshToken(refreshToken string) (types.TokenResponse, error) {
+func RefreshToken(refreshToken string) (*types.TokenResponse, error) {
 
 	// 同middleware/auth.go中的JWTauth()判断refresh_token是否以Bearer开头
 	if !strings.HasPrefix(refreshToken, "Bearer ") {
-        return types.TokenResponse{}, fmt.Errorf("无效的token格式")
+        return nil, fmt.Errorf("无效的token格式")
     }
     refreshToken = refreshToken[7:]
 
@@ -58,28 +58,29 @@ func RefreshToken(refreshToken string) (types.TokenResponse, error) {
 
 	// 判断token是否有效，claims.TokenType是否为refresh_token
 	if err != nil || !token.Valid || claims.TokenType != "refresh_token" {
-		return types.TokenResponse{}, fmt.Errorf("无效的refresh_token: %s", err)
+		return nil, fmt.Errorf("无效的refresh_token: %s", err)
 	}
 
 	// 生成新的access_token和refresh_token
 	accessToken, newRefreshToken, err := myjwt.GenerateToken(claims.Username)
 	if err != nil {
-		return types.TokenResponse{}, fmt.Errorf("刷新token失败: %s", err)
+		return nil, fmt.Errorf("刷新token失败: %s", err)
 	}
 
-	return types.TokenResponse{
+	tokenResponse := types.TokenResponse{
 		Token: accessToken,
 		RefreshToken: newRefreshToken,
-	}, nil
+	}
+	return &tokenResponse, nil
 }
 
-func GetUserInfo(username string) (types.UserInfoResponse, error) {
+func GetUserInfo(username string) (*types.UserInfoResponse, error) {
 	user, err := dao.GetUser(username)
 	if err != nil {
-		return types.UserInfoResponse{}, fmt.Errorf("获取用户信息失败: %v", err)
+		return nil, fmt.Errorf("获取用户信息失败: %v", err)
 	}
 
-	return types.UserInfoResponse{
+	userResponse := types.UserInfoResponse{
 		ID: user.ID,
 		Avatar: user.Avatar,
 		Nickname: user.Nickname,
@@ -89,7 +90,8 @@ func GetUserInfo(username string) (types.UserInfoResponse, error) {
 		Gender: user.Gender,
 		Email: user.Email,
 		Birthday: user.Birthday,
-	}, nil
+	}
+	return &userResponse, nil
 }
 
 func UpdatePassword(username, newPassword string) error {

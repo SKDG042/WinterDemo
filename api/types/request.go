@@ -65,3 +65,11 @@ type UpdateCommentRequest struct {
 	Content 	string		`json:"content"`
 }
 
+// 添加购物车的请求结构体
+type AddCartRequest struct {
+	ProductID	uint	`json:"product_id"`
+	Quantity	int		`json:"quantity"`
+}
+
+
+

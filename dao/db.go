@@ -54,7 +54,7 @@ func InitDB() error {
 	fmt.Println("数据库连接成功")
 
 	//接下来依据models中的结构体创建表
-	err = DB.AutoMigrate(&models.User{}, &models.Product{}, &models.Category{}, &models.Comment{})
+	err = DB.AutoMigrate(&models.User{}, &models.Product{}, &models.Category{}, &models.Comment{}, &models.Cart{})
 	if err != nil {
 		return fmt.Errorf("迁移表失败: %s", err)
 	}

@@ -83,11 +83,13 @@ func InitRouter() *server.Hertz {
 			comment.PUT("/:comment_id", handler.UpdateComment)
 		}
 
-		// //购物车相关路由
-		// cart := auth.Group("/cart")
-		// {
-
-		// }
+		//购物车相关路由
+		cart := auth.Group("/cart")
+		{	// 商品加入购物车
+			cart.POST("/addCart", handler.AddCart)
+			// 获取购物车列表
+			cart.GET("/list", handler.GetCartList)
+		}
 
 		// //订单相关路由
 		// order := auth.Group("/order")

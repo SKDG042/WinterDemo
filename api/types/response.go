@@ -68,3 +68,37 @@ type ProductResponse struct {
 type ProductListResponse struct {
 	Products []ProductResponse `json:"products"`
 }
+
+// 评论响应
+type CommentResponse struct {
+    CommentID   uint   `json:"comment_id"`
+    Content     string `json:"content"`
+    UserID      uint   `json:"user_id"`
+    Nickname    string `json:"nickname"`
+    Avatar      string `json:"avatar"`
+    ProductID   uint   `json:"product_id"`
+    ParentID    uint   `json:"parent_id"`
+    CreatedAt   string `json:"created_at"`
+}
+
+// 评论列表响应
+type CommentListResponse struct {
+	Comments []CommentResponse `json:"comments"`
+}
+
+// 购物车响应
+type CartResponse struct {
+	ProductID	uint	`json:"product_id"`
+	Name		string	`json:"name"`
+	Type		string	`json:"type"`
+	Price		float64	`json:"price"`
+	Cover		string	`json:"cover"`
+	Link		string	`json:"link"`
+	Num			int		`json:"num"`
+}
+
+// 购物车列表响应
+type CartListResponse struct {
+	Cart 	[]CartResponse `json:"cart"`
+	Account float64			`json:"account"`
+}

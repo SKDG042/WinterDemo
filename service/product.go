@@ -77,13 +77,14 @@ func GetProductsByCategory(categoryID int) (types.ProductListResponse, error) {
 }
 
 // 获取商品详情
-func GetProductDetail(id int) (types.ProductResponse, error) {
-	product, err := dao.GetProductByID(id)
+func GetProductDetail(productID uint) (*types.ProductResponse, error) {
+	product, err := dao.GetProductByID(productID)
 	if err != nil {
-		return types.ProductResponse{}, err
+		return nil, err
 	}
 	
-	return convertToProductResponse(product), nil
+	productResponse := convertToProductResponse(product)
+	return &productResponse, nil
 }
 
 // 添加商品分类

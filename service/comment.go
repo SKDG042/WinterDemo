@@ -3,10 +3,25 @@ package service
 import (
 	"WinterDemo/dao"
 	"WinterDemo/models"
+	"WinterDemo/api/types"
 	"fmt"
 )
 
-func AddComment(username string, productID uint, content string,ParentID *uint) (*models.Comment,error) {
+// 添加转换为响应体的函数
+func convertToCommentResponse(comment models.Comment) types.CommentResponse {
+	return types.CommentResponse{
+		CommentID: comment.ID,
+		Content: comment.Content,
+		UserID: comment.UserID,
+		Nickname: comment.Nickname,
+		Avatar: comment.Avatar,
+		ProductID: comment.ProductID,
+		ParentID: comment.ParentID,
+		CreatedAt: comment.CreatedAt.Format("2006-01-02 15:04:05"),
+	}
+}
+
+func AddComment(username string, productID uint, content string,ParentID *uint) (*types.CommentResponse,error) {
 	if len(content) == 0 {
 		return nil, fmt.Errorf("评论内容不能为空")
 	}
@@ -37,7 +52,9 @@ func AddComment(username string, productID uint, content string,ParentID *uint) 
 		return nil, fmt.Errorf("添加评论失败: %s", err)
 	}
 
-	return &comment, nil
+	commentResponse := convertToCommentResponse(comment)
+
+	return &commentResponse, nil
 }
 
 func DeleteComment(commentID uint, username string) error {
@@ -64,12 +81,18 @@ func DeleteComment(commentID uint, username string) error {
 	return nil
 }
 
-func GetCommentsByProductID(productID uint) ([]models.Comment, error) {
+func GetCommentsByProductID(productID uint) (*types.CommentListResponse, error) {
 	comments, err := dao.GetCommentsByProductID(productID)
 	if err != nil {
 		return nil, fmt.Errorf("获取评论失败: %s", err)
 	}
-	return comments, nil
+
+	var commentList types.CommentListResponse
+	for _, comment := range comments {
+		commentList.Comments = append(commentList.Comments, convertToCommentResponse(comment))
+	}
+
+	return &commentList, nil
 }
 
 func UpdateComment(commentID uint, content *string, username string) error {
