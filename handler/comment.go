@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// 添加评论(支持匿名评论)
 func AddComment(_ context.Context, ctx *app.RequestContext) {
 	var req types.AddCommentRequest
 
@@ -24,7 +25,7 @@ func AddComment(_ context.Context, ctx *app.RequestContext) {
 		return
 	}
 
-	comment, err := service.AddComment(username, uint(productID), req.Content, req.ParentID)
+	comment, err := service.AddComment(username, uint(productID), req.Content, req.ParentID, req.IsAnonymous)
 	if err != nil {
 		ctx.JSON(consts.StatusOK, types.ErrorResponse(10105, "添加评论失败"))
 		return
@@ -38,6 +39,7 @@ func AddComment(_ context.Context, ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
 }
 
+// 删除评论
 func DeleteComment(_ context.Context, ctx *app.RequestContext) {
 	commentID, err := strconv.Atoi(ctx.Param("comment_id"))
 	if err != nil {
@@ -59,6 +61,7 @@ func DeleteComment(_ context.Context, ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse("删除评论成功"))
 }
 
+// 通过商品ID获取商品评论
 func GetCommentsByProductID(_ context.Context, ctx *app.RequestContext) {
 	productID, err := strconv.Atoi(ctx.Param("product_id"))
 	if err != nil {
@@ -75,6 +78,7 @@ func GetCommentsByProductID(_ context.Context, ctx *app.RequestContext) {
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(comments))
 }
 
+// 修改评论
 func UpdateComment(_ context.Context, ctx *app.RequestContext) {
 	username := ctx.GetString("username")
 

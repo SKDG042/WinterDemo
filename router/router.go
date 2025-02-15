@@ -76,10 +76,13 @@ func InitRouter() *server.Hertz {
 		// }
 		//评论相关路由
 		comment := auth.Group("/comment")
-		{	// 评论的增删查改
+		{	// 添加评论(支持匿名评论)
 			comment.POST("/:product_id", handler.AddComment)
+			// 删除评论
 			comment.DELETE("/:comment_id", handler.DeleteComment)
+			// 获取商品评论
 			comment.GET("/:product_id", handler.GetCommentsByProductID)
+			// 修改评论
 			comment.PUT("/:comment_id", handler.UpdateComment)
 		}
 

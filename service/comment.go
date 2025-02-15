@@ -29,7 +29,7 @@ func convertToCommentResponse(comment models.Comment) types.CommentResponse {
 	return response
 }
 
-func AddComment(username string, productID uint, content string,ParentID *uint) (*types.CommentResponse,error) {
+func AddComment(username string, productID uint, content string,ParentID *uint, isAnonymous bool) (*types.CommentResponse,error) {
 	if len(content) == 0 {
 		return nil, fmt.Errorf("评论内容不能为空")
 	}
@@ -51,6 +51,13 @@ func AddComment(username string, productID uint, content string,ParentID *uint) 
         ProductID: productID,
         ParentID:  0,
 	}
+
+	// 处理匿名评论
+	if isAnonymous {
+		comment.Nickname = "匿名用户"
+		comment.Avatar   = "https://i2.hdslb.com/bfs/face/491060a51b937b0e6498e497d2480d8d3cf86725.jpg@150w_150h.jpg"
+	}
+
 
 	if  ParentID != nil {
 		comment.ParentID = *ParentID

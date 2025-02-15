@@ -57,7 +57,7 @@ type AddProductRequest struct {
 type AddCommentRequest struct {
 	Content 	string		`json:"content"`
 	ParentID	*uint		`json:"parent_id,omitempty"`
-	ProductID	uint		`json:"product_id"`
+	IsAnonymous	bool		`json:"is_anonymous"` // 是否匿名
 }
 
 // 更新评论的请求结构体
