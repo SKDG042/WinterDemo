@@ -79,6 +79,7 @@ type CommentResponse struct {
     ProductID   uint   `json:"product_id"`
     ParentID    uint   `json:"parent_id"`
     CreatedAt   string `json:"created_at"`
+	Children	[]CommentResponse `json:"children,omitempty"`
 }
 
 // 评论列表响应

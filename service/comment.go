@@ -1,15 +1,15 @@
 package service
 
 import (
+	"WinterDemo/api/types"
 	"WinterDemo/dao"
 	"WinterDemo/models"
-	"WinterDemo/api/types"
 	"fmt"
 )
 
 // 添加转换为响应体的函数
 func convertToCommentResponse(comment models.Comment) types.CommentResponse {
-	return types.CommentResponse{
+	response := types.CommentResponse{
 		CommentID: comment.ID,
 		Content: comment.Content,
 		UserID: comment.UserID,
@@ -19,6 +19,14 @@ func convertToCommentResponse(comment models.Comment) types.CommentResponse {
 		ParentID: comment.ParentID,
 		CreatedAt: comment.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
+
+	// 通过递归将子评论添加到响应体中
+	for _, child := range comment.Children {
+		childResponse := convertToCommentResponse(child)
+		response.Children = append(response.Children, childResponse)
+	}
+
+	return response
 }
 
 func AddComment(username string, productID uint, content string,ParentID *uint) (*types.CommentResponse,error) {

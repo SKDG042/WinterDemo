@@ -12,4 +12,6 @@ type Comment struct {
 	IsPraise	uint		`gorm:"type:uint;default:0;column:is_praise"` // 0为未处理， 1为点赞， 2为点踩
 	ProductID	uint		`gorm:"type:uint;not null;index;column:product_id"`
 	ParentID	uint		`gorm:"type:uint;default:0;column:parent_id"` // 父评论ID, 0为顶级评论
+	// gorm:"-"的意思是这个字段不会存储在数据库中，以防止数据冗余等等
+	Children    []Comment	`gorm:"-"`
 }
