@@ -1,23 +1,27 @@
 package service
 
 import (
-	"fmt"
+	"WinterDemo/api/types"
 	"WinterDemo/dao"
 	"WinterDemo/models"
-	"WinterDemo/api/types"
+	"fmt"
 )
 
-func convertToCartResponse(cart models.Cart) types.CartResponse {
-	CartResponse := types.CartResponse{
-		ProductID: cart.ProductID,
-		Name: cart.Product.Name,
-		Type: cart.Product.Type,
-		Price: cart.Product.Price,
-		Cover: cart.Product.Cover,
-		Link: cart.Product.Link,
-		Num: cart.Quantity,
-	}
-	return CartResponse
+// 将购物车转换为响应格式
+func convertToCartResponse(cart models.Cart) []types.CartProductResponse {
+    var cartResponses []types.CartProductResponse
+    for _, product := range cart.Product {
+        cartResponses = append(cartResponses, types.CartProductResponse{
+            ProductID: product.ID,
+            Name:     product.Name,
+            Type:     product.Type,
+            Price:    product.Price,
+            Cover:    product.Cover,
+            Link:     product.Link,
+            Num:      cart.Quantity,
+        })
+    }
+    return cartResponses
 }
 
 func AddCart(username string, productID uint, quantity int) error {
@@ -43,22 +47,39 @@ func AddCart(username string, productID uint, quantity int) error {
 }
 
 func GetCartList(username string) (*types.CartListResponse, error) {
+    user, err := GetUserInfo(username)
+    if err != nil {
+        return nil, fmt.Errorf("获取用户信息失败: %v", err)
+    }
+
+    carts, err := dao.GetCartByUserID(user.ID)
+    if err != nil {
+        return nil, fmt.Errorf("获取购物车失败: %v", err)
+    }
+
+    var response types.CartListResponse
+    
+	for _, cart := range carts {
+		for _, product := range cart.Product {
+			response.Account += float64(product.Price) * float64(cart.Quantity)
+			// 使用语法糖将convertToCartResponse(cart)转换后的切片展开再追加到response.Cart中
+			response.Cart = append(response.Cart, convertToCartResponse(cart)...)
+		}
+	}
+
+    return &response, nil
+}
+
+// 清空购物车
+func DeleteCart(username string) error {
 	user, err := GetUserInfo(username)
 	if err != nil {
-		return nil, fmt.Errorf("获取用户信息失败: %v", err)
+		return fmt.Errorf("获取用户信息失败: %v", err)
 	}
 
-	carts, err := dao.GetCartByUserID(user.ID)
-	if err != nil {
-		return nil, fmt.Errorf("获取购物车失败: %v", err)
+	if err := dao.DeleteCart(user.ID); err != nil {
+		return fmt.Errorf("删除购物车失败: %v", err)
 	}
 
-	var response types.CartListResponse
-
-	for _, cart := range carts {
-		response.Cart = append(response.Cart, convertToCartResponse(cart))
-		response.Account += float64(cart.Quantity) * cart.Product.Price
-	}
-
-	return &response, nil
+	return nil
 }

@@ -37,3 +37,14 @@ func GetCartList(_ context.Context, ctx *app.RequestContext) {
 
 	ctx.JSON(consts.StatusOK, types.SuccessResponse(data))
 }
+
+func DeleteCart(_ context.Context, ctx *app.RequestContext) {
+	username := ctx.GetString("username")
+
+	if err := service.DeleteCart(username); err != nil {
+		ctx.JSON(consts.StatusOK, types.ErrorResponse(10105, "清空购物车失败"))
+		return
+	}
+
+	ctx.JSON(consts.StatusOK, types.SuccessResponse("清空购物车成功"))
+}

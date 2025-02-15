@@ -89,13 +89,16 @@ func InitRouter() *server.Hertz {
 			cart.POST("/addCart", handler.AddCart)
 			// 获取购物车列表
 			cart.GET("/list", handler.GetCartList)
+			// 清空购物车
+			cart.DELETE("/clear", handler.DeleteCart)
 		}
 
-		// //订单相关路由
-		// order := auth.Group("/order")
-		// {
-
-		// }
+		//订单相关路由
+		order := auth.Group("/operate")
+		{
+			// 创建订单
+			order.POST("/order", handler.CreateOrder)
+		}
 
 	}
 	return h

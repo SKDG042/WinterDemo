@@ -13,7 +13,8 @@ type Product struct {
 	Cover		string		`gorm:"type:text"`
 	PublishTime string		`gorm:"type:varchar(20);column:publish_time"`
 	Link		string		`gorm:"type:text"`
-	Categories []Category	`gorm:"many2many:product_categories;"`
+	Categories 	[]Category	`gorm:"many2many:product_categories;"`
+	Cart 		[]Cart		`gorm:"many2many:cart_products;"`
 }
 
 // many2many是一种多对多关系，而product_categories是中间表，用于存储product和category之间的关系

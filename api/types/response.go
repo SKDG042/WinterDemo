@@ -87,7 +87,7 @@ type CommentListResponse struct {
 }
 
 // 购物车响应
-type CartResponse struct {
+type CartProductResponse struct {
 	ProductID	uint	`json:"product_id"`
 	Name		string	`json:"name"`
 	Type		string	`json:"type"`
@@ -99,6 +99,23 @@ type CartResponse struct {
 
 // 购物车列表响应
 type CartListResponse struct {
-	Cart 	[]CartResponse `json:"cart"`
+	Cart 	[]CartProductResponse `json:"cart"`
 	Account float64			`json:"account"`
+}
+
+// 订单物品响应
+type OrderProductResponse struct {
+	ProductID	uint	`json:"product_id"`
+	Name		string	`json:"name"`
+	Price		float64	`json:"price"`
+	Quantity	int		`json:"quantity"`
+}
+
+// 订单响应
+type OrderResponse struct {
+	OrderID		uint				`json:"order_id"`
+	Username	string				`json:"username"`
+	Product		[]OrderProductResponse		`json:"product"`
+	TotalPrice	float64				`json:"total_price"`
+	CreatedAt	string				`json:"created_at"`
 }
